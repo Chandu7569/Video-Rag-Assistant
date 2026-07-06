@@ -3,10 +3,11 @@
 // value below with your actual Render URL (without https:// or
 // trailing slash), e.g. "video-rag-backend.onrender.com"
 // ============================================================
-const BACKEND_HOST = 'your-app-name.onrender.com';
+const BACKEND_HOST = '127.0.0.1:8000';
+const IS_LOCAL = BACKEND_HOST.includes('localhost') || BACKEND_HOST.includes('127.0.0.1');
 
-const BACKEND_HTTP_BASE = `https://${BACKEND_HOST}`;
-const BACKEND_WS_BASE = `wss://${BACKEND_HOST}/ws/live`;
+const BACKEND_HTTP_BASE = IS_LOCAL ? `http://${BACKEND_HOST}` : `https://${BACKEND_HOST}`;
+const BACKEND_WS_BASE = IS_LOCAL ? `ws://${BACKEND_HOST}/ws/live` : `wss://${BACKEND_HOST}/ws/live`;
 
 // ---- DOM references (declared up front so no element is used before it exists) ----
 const meetingIdInput = document.getElementById('meetingId');
@@ -356,7 +357,8 @@ function startLiveUrlSession() {
     return;
   }
 
-  liveUrlSocket = new WebSocket(`wss://${BACKEND_HOST}/ws/live-url/${encodeURIComponent(meetingId)}`);
+  const wsProtocol = IS_LOCAL ? 'ws://' : 'wss://';
+  liveUrlSocket = new WebSocket(`${wsProtocol}${BACKEND_HOST}/ws/live-url/${encodeURIComponent(meetingId)}`);
 
   liveUrlSocket.onopen = () => {
     liveUrlSocket.send(JSON.stringify({ url }));
