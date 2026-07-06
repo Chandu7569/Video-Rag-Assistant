@@ -1,0 +1,1 @@
+echo This is a test meeting about launching our new product next quarter. We discussed budget and timeline.
