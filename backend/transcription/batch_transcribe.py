@@ -1,3 +1,4 @@
+import httpx
 from deepgram import DeepgramClient, PrerecordedOptions, FileSource
 from config import settings
 
@@ -23,6 +24,9 @@ def transcribe_audio_file(file_path: str) -> str:
 
     # deepgram-sdk 3.x uses `.prerecorded.` — `.rest.` is only valid on the
     # newer 7.x SDK line, which is not what's installed here (3.2.7).
-    response = client.listen.prerecorded.v("1").transcribe_file(payload, options)
+    # Use a large timeout (300 seconds) to prevent "The write operation timed out"
+    # error when uploading larger video/audio files on slower connections.
+    timeout = httpx.Timeout(300.0, connect=10.0)
+    response = client.listen.prerecorded.v("1").transcribe_file(payload, options, timeout=timeout)
     transcript = response.results.channels[0].alternatives[0].transcript
     return transcript
