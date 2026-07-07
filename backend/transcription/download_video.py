@@ -1,5 +1,6 @@
 import os
 import uuid
+import time
 import yt_dlp
 
 
@@ -26,8 +27,18 @@ def download_audio_from_url(url: str, output_dir: str = "uploads_tmp") -> str:
         "noplaylist": True,
     }
 
-    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        ydl.extract_info(url, download=True)
+    max_retries = 3
+    for attempt in range(max_retries):
+        try:
+            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                ydl.extract_info(url, download=True)
+            break
+        except Exception as e:
+            if attempt < max_retries - 1:
+                print(f"Warning: yt-dlp download failed (attempt {attempt + 1}/{max_retries}), retrying in 2s: {e}")
+                time.sleep(2)
+            else:
+                raise RuntimeError(f"Failed to download audio after {max_retries} attempts: {e}") from e
 
     final_path = output_template.replace(".%(ext)s", "") + ".wav"
 

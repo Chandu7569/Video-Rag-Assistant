@@ -1,5 +1,6 @@
 import asyncio
 import subprocess
+import time
 import yt_dlp
 
 
@@ -9,9 +10,18 @@ def get_direct_stream_url(url: str) -> str:
     stream URL that ffmpeg can read from continuously.
     """
     ydl_opts = {"quiet": True, "format": "bestaudio/best"}
-    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        info = ydl.extract_info(url, download=False)
-        return info["url"]
+    max_retries = 3
+    for attempt in range(max_retries):
+        try:
+            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                info = ydl.extract_info(url, download=False)
+                return info["url"]
+        except Exception as e:
+            if attempt < max_retries - 1:
+                print(f"Warning: Failed to resolve stream URL (attempt {attempt + 1}/{max_retries}), retrying in 2s: {e}")
+                time.sleep(2)
+            else:
+                raise RuntimeError(f"Failed to resolve stream URL after {max_retries} attempts: {e}") from e
 
 
 class UrlAudioStreamer:

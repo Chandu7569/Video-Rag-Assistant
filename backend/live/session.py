@@ -51,9 +51,12 @@ class LiveSession:
             self.last_suggestion_time = now
 
             # Blocking Groq call runs in a thread so it doesn't stall incoming audio
-            suggestion = await asyncio.to_thread(generate_suggestion, recent)
-            if suggestion and "no suggestion" not in suggestion.lower():
-                await self.on_suggestion(suggestion, recent_start, end_time)
+            try:
+                suggestion = await asyncio.to_thread(generate_suggestion, recent)
+                if suggestion and "no suggestion" not in suggestion.lower():
+                    await self.on_suggestion(suggestion, recent_start, end_time)
+            except Exception as e:
+                print(f"Warning: Failed to generate live suggestion: {e}")
 
     async def close(self):
         await self.deepgram.close()
