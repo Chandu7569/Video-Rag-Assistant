@@ -88,7 +88,7 @@ psql -U your_postgres_user -d your_database_name -f db/scheme.sql
 ### The Easy Way (Windows batch script)
 Run the following command from the root directory of the project in Windows PowerShell:
 ```powershell
-.\start-all.bat
+start-all.bat
 ```
 *(In standard Command Prompt, you can run `start-all.bat` directly).*
 
