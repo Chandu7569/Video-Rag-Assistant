@@ -25,7 +25,7 @@ A real-time video speech-to-text, vector retrieval (RAG), summarization, and AI-
 
 ## Prerequisites
 Before you start, make sure you have the following installed on your machine:
-1. **Python 3.10+**
+1. **Python 3.12**
 2. **Node.js (v18+) & npm**
 3. **PostgreSQL** with the `pgvector` extension enabled (e.g., standard local Postgres or a cloud database like Supabase).
 4. **API Keys**:
@@ -37,11 +37,8 @@ Before you start, make sure you have the following installed on your machine:
 ## Installation & Setup
 
 ### 1. Database Setup
-Ensure you have a PostgreSQL database running, then execute the schema script to create the necessary tables and enable `pgvector`:
-```bash
-psql -U your_postgres_user -d your_database_name -f db/scheme.sql
-```
-*Note: If using Supabase, you can copy the contents of `db/scheme.sql` and run it in the SQL Editor.*
+
+Note: If using Supabase, you can copy the contents of `db/scheme.sql` and run it in the SQL Editor.*
 
 ### 2. Backend Setup
 1. Navigate to the `backend` directory:
@@ -60,7 +57,7 @@ psql -U your_postgres_user -d your_database_name -f db/scheme.sql
    ```
 4. Create and activate a Python virtual environment:
    ```bash
-   python -m venv venv
+   py -3.12 -m venv venv
    # On Windows (CMD/PowerShell):
    .\venv\Scripts\activate
    # On macOS/Linux:
@@ -74,7 +71,7 @@ psql -U your_postgres_user -d your_database_name -f db/scheme.sql
 ### 3. Desktop Application Setup
 1. Navigate to the `desktop` directory:
    ```bash
-   cd ../desktop
+   cd desktop
    ```
 2. Install the Node dependencies:
    ```bash
