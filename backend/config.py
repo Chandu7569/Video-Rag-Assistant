@@ -28,8 +28,8 @@ class Settings:
     # Groq model names — separate settings so you can tune speed vs. quality
     # independently for each use case (live suggestions need to be fast;
     # post-call summaries can afford a slightly slower/bigger model)
-    GROQ_SUMMARY_MODEL = os.getenv("GROQ_SUMMARY_MODEL", "llama-3.3-70b-versatile")
-    GROQ_LIVE_MODEL = os.getenv("GROQ_LIVE_MODEL", "llama-3.1-8b-instant")
+    GROQ_SUMMARY_MODEL = os.getenv("GROQ_SUMMARY_MODEL", "qwen/qwen3.8-27b")
+    GROQ_LIVE_MODEL = os.getenv("GROQ_LIVE_MODEL", "qwen/qwen3.8-27b")
 
     # Deepgram key, used for live streaming transcription
     DEEPGRAM_API_KEY = os.getenv("DEEPGRAM_API_KEY")

@@ -386,12 +386,33 @@ Context from Knowledge Base:
 
 User Question: {user_query}
 """
-            response = groq_client.chat.completions.create(
-                model=settings.GROQ_SUMMARY_MODEL,
-                messages=[{"role": "user", "content": rag_prompt}],
-                temperature=0.2,
-                max_tokens=800,
-            )
+            candidate_models = [
+                settings.GROQ_SUMMARY_MODEL,
+                "qwen/qwen3.8-27b",
+                "openai/gpt-oss-120b",
+                "openai/gpt-oss-20b",
+            ]
+            models_to_try = list(dict.fromkeys(candidate_models))
+            response = None
+            last_err = None
+            for m in models_to_try:
+                try:
+                    response = groq_client.chat.completions.create(
+                        model=m,
+                        messages=[{"role": "user", "content": rag_prompt}],
+                        temperature=0.2,
+                        max_tokens=800,
+                    )
+                    break
+                except Exception as e:
+                    last_err = e
+                    if "model_not_found" in str(e) or "404" in str(e) or "decommissioned" in str(e):
+                        continue
+                    raise
+
+            if response is None:
+                raise last_err
+
             answer_text = response.choices[0].message.content
 
         # Display assistant answer
