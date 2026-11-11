@@ -2,7 +2,18 @@ import httpx
 import os
 import glob
 import subprocess
-from deepgram import DeepgramClient, PrerecordedOptions, FileSource
+from deepgram import DeepgramClient
+try:
+    from deepgram import PrerecordedOptions, FileSource
+except (ImportError, AttributeError):
+    try:
+        from deepgram.clients.prerecorded.v1.options import PrerecordedOptions
+        from deepgram.clients.prerecorded.v1.types import FileSource
+    except (ImportError, AttributeError):
+        class PrerecordedOptions(dict):
+            def __init__(self, **kwargs):
+                super().__init__(**kwargs)
+        FileSource = dict
 from config import settings
 
 

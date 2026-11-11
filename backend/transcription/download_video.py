@@ -23,6 +23,11 @@ def download_audio_from_url(url: str, output_dir: str = "uploads_tmp") -> str:
             "preferredcodec": "wav",
             "preferredquality": "192",
         }],
+        "extractor_args": {
+            "youtube": {
+                "player_client": ["android", "ios", "web"]
+            }
+        },
         "quiet": True,
         "noplaylist": True,
     }
