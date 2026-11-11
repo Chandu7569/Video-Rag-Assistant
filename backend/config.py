@@ -1,6 +1,10 @@
 import os
 from dotenv import load_dotenv
 
+# Search for .env both in the config file's own directory (backend/) and cwd
+_env_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env")
+if os.path.exists(_env_path):
+    load_dotenv(_env_path)
 load_dotenv()
 
 

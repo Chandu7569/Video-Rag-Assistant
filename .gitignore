@@ -1,9 +1,15 @@
 # Python
 backend/venv/
 backend/__pycache__/
-backend/*.pyc
+__pycache__/
+*.pyc
 backend/.env
+.env
 backend/uploads_tmp/
+uploads_tmp/
+
+# Streamlit
+.streamlit/secrets.toml
 
 # Node / Electron
 desktop/node_modules/
